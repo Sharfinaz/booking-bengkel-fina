@@ -1,7 +1,8 @@
 package com.bengkel.booking.models;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
+
 import com.bengkel.booking.interfaces.IBengkelPayment;
 
 import lombok.AllArgsConstructor;
@@ -11,25 +12,32 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BookingOrder implements IBengkelPayment{
+public class BookingOrder implements IBengkelPayment {
 	private String bookingId;
 	private Customer customer;
 	private List<ItemService> services;
 	private String paymentMethod;
 	private double totalServicePrice;
 	private double totalPayment;
-	
+	private LocalDate bookingDate;
+
 	@Override
 	public void calculatePayment() {
 		double discount = 0;
 		if (paymentMethod.equalsIgnoreCase("Saldo Coin")) {
 			discount = getTotalServicePrice() * RATES_DISCOUNT_SALDO_COIN;
-		}else {
+		} else {
 			discount = getTotalServicePrice() * RATES_DISCOUNT_CASH;
 		}
-		
+
 		setTotalPayment(getTotalServicePrice() - discount);
 	}
 
-	
+	public LocalDate getBookingDate() {
+		return bookingDate;
+	}
+
+	public void setBookingDate(LocalDate bookingDate) {
+        this.bookingDate = bookingDate;
+    }
 }
